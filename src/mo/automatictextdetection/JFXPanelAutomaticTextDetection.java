@@ -913,41 +913,7 @@ public class JFXPanelAutomaticTextDetection extends JFXPanel {
             this.totalIncreaseWidth=newIncreaseWidth;
         
         }
-        
-       /* if(this.aoiMap!=null){
-            
-            Double dWidth = new Double (i);
-            dWidth = dWidth/this.realWidth;
 
-            for(AOI aoi: this.aoiMap.getAOIs()){
-                
-                Double dWidthX = this.aoiMap.getAOIs().get(aoi.getId()).getRelativeX()-dWidth;
-                Double dWidthWidth = dWidth+dWidth+this.aoiMap.getAOIs().get(aoi.getId()).getRelativeWidth();
-                
-                if (Double.compare(dWidthX,0.0)>0 && Double.compare(dWidthWidth,1.0)<0){
-                
-                    this.aoiMap.getAOIs().get(aoi.getId()).setRelativeSize(
-                            dWidthWidth,
-                            this.aoiMap.getAOIs().get(aoi.getId()).getReltiveHeight());
-                    this.aoiMap.getAOIs().get(aoi.getId()).setRelativeXY(
-                            dWidthX,
-                            this.aoiMap.getAOIs().get(aoi.getId()).getRelativeY());
-                    
-                    if (this.aoiMap.getAOIs() != null & this.aoiMap.getAOIFile() != null) {
-                        if (this.aoiMap.getAOIs().size() > 0) {
-                            this.aoiMap.aoisToCsvFile(this.aoiMap.getAOIFile());
-                        }//if
-                    }//if
-                    this.aoiMap.cleanMap();
-                    this.aoiMap.repaint();
-                    this.repaint();
-                    
-                }//if
-                
-            }//for
-            
-        }//if*/
-       
        if(this.aoiMap==null){}
        
        else{
