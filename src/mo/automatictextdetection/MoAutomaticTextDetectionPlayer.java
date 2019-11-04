@@ -23,8 +23,8 @@ public class MoAutomaticTextDetectionPlayer {
     
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 
-        File videoFile =  new File("C:\\Users\\gustavo\\Desktop\\mo-final\\MultimodalObserver-analysisModule\\build\\libs\\tt3\\participant-t3\\capture\\test1.mp4");
-        File dataFile = new File("C:\\Users\\gustavo\\Desktop\\mo-final\\MultimodalObserver-analysisModule\\build\\libs\\tt3\\participant-t3\\capture\\test2.txt");
+        File videoFile =  new File("C:\\Users\\daniel\\Desktop\\mo-final\\MultimodalObserver-analysisModule\\build\\libs\\tt3\\participant-t3\\capture\\test1.mp4");
+        File dataFile = new File("C:\\Users\\daniel\\Desktop\\mo-final\\MultimodalObserver-analysisModule\\build\\libs\\tt3\\participant-t3\\capture\\test2.txt");
  
         AutomaticTextDetectionPlayer player =  new AutomaticTextDetectionPlayer(dataFile, videoFile);
         t = 0;
