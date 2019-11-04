@@ -965,7 +965,9 @@ public class JFXPanelAutomaticTextDetection extends JFXPanel {
         
         }
         
-        if(this.aoiMap!=null){
+        if(this.aoiMap==null){}
+        
+        else{
             try{
             Double dHeight = new Double (i);
             dHeight = dHeight/this.realHeight; 
