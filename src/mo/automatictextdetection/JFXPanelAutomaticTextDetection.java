@@ -743,6 +743,7 @@ public class JFXPanelAutomaticTextDetection extends JFXPanel {
     public void automaticDetection(){
         
         double ab=0;
+        
         Mat src_gray = new Mat();
         imageMaxX = this.src.size().width;
         imageMaxY= this.src.size().height;
