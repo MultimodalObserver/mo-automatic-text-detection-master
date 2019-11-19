@@ -724,88 +724,93 @@ public class JFXPanelAutomaticTextDetection extends JFXPanel {
     private int totalIncreaseHeigth;
 
     public void setVideoFile(String videoFile) {
-        this.videoFile = videoFile;
-        this.src = new Mat();
-        Mat video = new Mat();
-        VideoCapture cap = new VideoCapture();
-        cap.open(videoFile);
-        boolean read = cap.read(video);
-        Imgcodecs.imwrite("img.jpg", video);
-        this.src = Imgcodecs.imread("img.jpg");
-            
-        try{File file = new File ("img.jpg");
-            if(file.delete()){}
-        }catch(Exception e){
-        }//catch
+        
+        if(videoFile!=null){
+            this.videoFile = videoFile;
+            this.src = new Mat();
+            Mat video = new Mat();
+            VideoCapture cap = new VideoCapture();
+            cap.open(videoFile);
+            boolean read = cap.read(video);
+            Imgcodecs.imwrite("img.jpg", video);
+            this.src = Imgcodecs.imread("img.jpg");
+
+            try{File file = new File ("img.jpg");
+                if(file.delete()){}
+            }catch(Exception e){
+            }//catch
+        }
         
     }//setVideoFile
 
     public void automaticDetection(){
         
-        double ab=0;
-        
-        Mat src_gray = new Mat();
-        imageMaxX = this.src.size().width;
-        imageMaxY= this.src.size().height;
+        if(this.videoFile!=null){
+            double ab=0;
 
-        Mat grad = new Mat();
-        int scale = 1;
-        int delta = 0;
-        int ddepth = CvType.CV_16S;
-        Imgproc.GaussianBlur(this.src, this.src, new Size (3,3), 0, 0, Core.BORDER_DEFAULT);
-        Imgproc.cvtColor(this.src, src_gray, Imgproc.COLOR_RGB2GRAY);
-        Mat grad_x = new Mat();
-        Mat grad_y = new Mat();
-        Mat abs_grad_x = new Mat();
-        Mat abs_grad_y = new Mat();
-        Imgproc.Sobel( src_gray, grad_x, ddepth, 1, 0, 3, scale, delta, Core.BORDER_DEFAULT );
-        Imgproc.Sobel( src_gray, grad_y, ddepth, 0, 1, 3, scale, delta, Core.BORDER_DEFAULT );
-        Core.convertScaleAbs( grad_x, abs_grad_x );
-        Core.convertScaleAbs( grad_y, abs_grad_y );
-        Core.addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad );
-        Mat grad2= new Mat();
-        Imgproc.threshold(grad, grad2, 70, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C);
-        Mat SE = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size (1.1,1), new Point(-1,-1));
-        //Mat SE = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size (2,2), new Point(-1,-1));
-        Imgproc.dilate(grad2, grad2, SE, new Point(-1,-1), 1, Core.BORDER_REFLECT, new Scalar(255));
-        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        Mat m = new Mat();
-        Imgproc.findContours(grad2, contours, m, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
-            
-        Mat mask = Mat.zeros(grad2.size(), CvType.CV_8UC1);
-        
-        for (int i = 0;i<contours.size();i++) {
-            
-            Rect brect = Imgproc.boundingRect(contours.get(i));
-            double ar = brect.width / brect.height;
-            double r = (double)Core.countNonZero(grad2)/(brect.width*brect.height);
-            
-            if(brect.width>9 && brect.height>7 && r>.45 && brect.height<25){
-                
-                list.add(brect);
-                
+            Mat src_gray = new Mat();
+            imageMaxX = this.src.size().width;
+            imageMaxY= this.src.size().height;
+
+            Mat grad = new Mat();
+            int scale = 1;
+            int delta = 0;
+            int ddepth = CvType.CV_16S;
+            Imgproc.GaussianBlur(this.src, this.src, new Size (3,3), 0, 0, Core.BORDER_DEFAULT);
+            Imgproc.cvtColor(this.src, src_gray, Imgproc.COLOR_RGB2GRAY);
+            Mat grad_x = new Mat();
+            Mat grad_y = new Mat();
+            Mat abs_grad_x = new Mat();
+            Mat abs_grad_y = new Mat();
+            Imgproc.Sobel( src_gray, grad_x, ddepth, 1, 0, 3, scale, delta, Core.BORDER_DEFAULT );
+            Imgproc.Sobel( src_gray, grad_y, ddepth, 0, 1, 3, scale, delta, Core.BORDER_DEFAULT );
+            Core.convertScaleAbs( grad_x, abs_grad_x );
+            Core.convertScaleAbs( grad_y, abs_grad_y );
+            Core.addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad );
+            Mat grad2= new Mat();
+            Imgproc.threshold(grad, grad2, 70, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C);
+            Mat SE = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size (1.1,1), new Point(-1,-1));
+            //Mat SE = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size (2,2), new Point(-1,-1));
+            Imgproc.dilate(grad2, grad2, SE, new Point(-1,-1), 1, Core.BORDER_REFLECT, new Scalar(255));
+            List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+            Mat m = new Mat();
+            Imgproc.findContours(grad2, contours, m, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
+
+            Mat mask = Mat.zeros(grad2.size(), CvType.CV_8UC1);
+
+            for (int i = 0;i<contours.size();i++) {
+
+                Rect brect = Imgproc.boundingRect(contours.get(i));
+                double ar = brect.width / brect.height;
+                double r = (double)Core.countNonZero(grad2)/(brect.width*brect.height);
+
+                if(brect.width>9 && brect.height>7 && r>.45 && brect.height<25){
+
+                    list.add(brect);
+
+                }//if
+
+            }//for 
+
+            for(int i=0;i<list.size();i++){
+
+                createAutomaticAOI(list.get(i).x, list.get(i).y,list.get(i).width,list.get(i).height); 
+
+            }//for
+
+            this.repaint();   
+            list.removeAll(list);
+
+            if (this.aoiMap.getAOIs() != null & this.aoiMap.getAOIFile() != null) {
+
+                if (this.aoiMap.getAOIs().size() > 0) {
+
+                    this.aoiMap.aoisToCsvFile(this.aoiMap.getAOIFile());
+
+                }//if
+
             }//if
-            
-        }//for 
-            
-        for(int i=0;i<list.size();i++){
-            
-            createAutomaticAOI(list.get(i).x, list.get(i).y,list.get(i).width,list.get(i).height); 
-            
-        }//for
-        
-        this.repaint();   
-        list.removeAll(list);
-        
-        if (this.aoiMap.getAOIs() != null & this.aoiMap.getAOIFile() != null) {
-            
-            if (this.aoiMap.getAOIs().size() > 0) {
-                
-                this.aoiMap.aoisToCsvFile(this.aoiMap.getAOIFile());
-                
-            }//if
-            
-        }//if
+        }
            
     }//automaticDetection
     
